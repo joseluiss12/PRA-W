@@ -117,7 +117,12 @@ class ListArray : public List<T> {
 
 	}	
 	
-	ListArray(){ arr = new T[MINSIZE]; }
+	ListArray(){ 
+		
+		arr = new T[MINSIZE];
+		max = 0;
+	 	n = 0;	
+	}
 
 	~ListArray(){ delete[] arr; }
 
