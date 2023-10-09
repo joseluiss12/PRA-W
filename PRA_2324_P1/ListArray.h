@@ -133,5 +133,23 @@ class ListArray : public List<T> {
 	
 	}
 
-	friend std::ostream&operator<<(std::ostream &out, const ListArray<T> &list);
+	friend std::ostream&operator<<(std::ostream &out, const ListArray<T> &list){
+
+		out << "[ ";
+		for (int i = 0; i < max; i++){
+
+			out << list[i];
+			if (i < max-1){
+
+				out << ", ";
+
+			}
+
+		}
+
+		out << " ]";
+		return out;
+
+	}
+
 };
