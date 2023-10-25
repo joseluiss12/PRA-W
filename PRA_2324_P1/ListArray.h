@@ -35,7 +35,7 @@ class ListArray : public List<T> {
 
 	ListArray(){ 
 		
-		arr = new int[MINSIZE];
+		arr = new T[MINSIZE];
 		max = 2;
 	 	n = 0;	
 	}
