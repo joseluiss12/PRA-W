@@ -2,7 +2,9 @@
 #define LIST_H
 
 template <typename T>
+
 class List {
+
 	public:
 		virtual void insert(int pos, T e) = 0;
 		virtual void append(T e) = 0;

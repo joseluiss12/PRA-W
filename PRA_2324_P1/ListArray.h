@@ -2,6 +2,7 @@
 #include "List.h"
 
 template <typename T> 
+
 class ListArray : public List<T> {
 
     private:
@@ -19,108 +20,23 @@ class ListArray : public List<T> {
 
 		}
 		
-		*arr = *temp;
+		delete[] arr;
+		arr = new int[new_size];
 		max = new_size;
+		for(int j = 0; j < max; j++){
+		
+			arr[j] = temp[j];
+		
+		}
 		delete[] temp;	
 	}
 
     public:
 
-	void insert(int pos, T e){
-
-		if (pos > max || pos < 0){
-
-			throw  std::out_of_range("Fuera de Rango");
-
-		} else {
-			
-			arr[pos] = e;
-
-		}
-	}
-	
-	void append(T e){ arr[max-1] = e; }
-
-        void prepend(T e){ arr[0] = e; }
-
-	T remove(int pos){
-		
-		if (pos > max || pos < 0){
-
-                        throw  std::out_of_range("Fuera de Rango");
-
-                }
-
-		T temp = arr[pos];
-		arr[pos] = 0;
-		return temp;
-
-	}
-
-	T get(int pos){
-
-		if (pos > max || pos < 0){
-
-                        throw  std::out_of_range("Fuera de Rango");
-
-                }
-
-		return arr[pos];
-
-	}
-
-	int search(T e){
-
-		for (int pos = 0; pos < max; pos ++){
-
-			if ( arr[pos] == e){
-
-				return pos;
-
-			}
-		}
-
-		return -1;
-
-	}
-
-	bool empty(){
-
-		for (int i = 0; i < max; i++){
-
-			if (arr[i] != 0){
-
-				return false;
-
-			}
-
-		}
-
-		return true;
-
-	}
-
-	int size(){
-		
-		int num;
-		for (int i = 0; i < max; i++){
-
-			if (arr[i] != 0){
-
-				num++;
-
-			}
-
-		}
-
-		return num;
-
-	}	
-	
 	ListArray(){ 
 		
-		arr = new T[MINSIZE];
-		max = 0;
+		arr = new int[MINSIZE];
+		max = 2;
 	 	n = 0;	
 	}
 
@@ -128,7 +44,7 @@ class ListArray : public List<T> {
 
 	T operator[](int pos){
 	
-		if (pos > max || pos < 0){
+		if (pos < 0 || pos > n){
 	
 			throw  std::out_of_range("Fuera de Rango");
 	
@@ -141,10 +57,10 @@ class ListArray : public List<T> {
 	friend std::ostream&operator<<(std::ostream &out, const ListArray<T> &list){
 
 		out << "[ ";
-		for (int i = 0; i < max; i++){
+		for (int i = 0; i < list.max; i++){
 
-			out << list[i];
-			if (i < max-1){
+			out << list.arr[i];
+			if (i < list.max-1){
 
 				out << ", ";
 
@@ -156,5 +72,118 @@ class ListArray : public List<T> {
 		return out;
 
 	}
+	
+	virtual int size() override {
+		
+		return n;
+
+	}	
+	
+	virtual void append(T e) override { 
+	
+		if (size() == max) { resize(size()*2); }
+		arr[n] = e;
+		n++;
+	
+	}
+
+        virtual void prepend(T e) override { 
+        
+        	if (size() == max) { resize(size()*2); }
+		else { 
+		
+			for (int i = n; i > 0; i--){
+			
+				arr[i] = arr[i-1];
+				
+			}
+		
+			arr[0] = e;
+			n++;
+			
+		}
+        	
+        }
+
+	virtual void insert(int pos, T e) override {
+
+		if (pos < 0 || pos > n){
+
+			throw  std::out_of_range("Fuera de Rango");
+
+		}
+		if (size() == max) { resize(size()*2); }			
+		if (pos == 0) { prepend(e); }		
+		else if (pos == n) { append(e); }
+		else {
+						
+			for (int i = n; i > pos; i--){
+						
+				arr[i] = arr[i-1];
+						
+			}
+			arr[pos] = e;
+			n++;
+				
+		}
+				
+	}
+			
+	virtual T remove(int pos) override {
+		
+		if (pos < 0 || pos > size()-1){
+
+                        throw  std::out_of_range("Fuera de Rango");
+
+                } else {
+		
+			T temp = arr[pos];
+			for (int i = pos; i < n; i++){
+			
+				arr[i] = arr[i+1];
+				
+			} 
+			n--;
+			return temp;
+			
+		}
+
+	}
+
+	virtual T get(int pos) override {
+
+		if (pos < 0 || pos > size()-1){
+
+                        throw  std::out_of_range("Fuera de Rango");
+
+                }
+
+		return arr[pos];
+
+	}
+
+	virtual int search(T e) override {
+
+		for (int i = 0; i < n; i ++){
+
+			if ( arr[i] == e){
+
+				return i;
+
+			}
+		}
+
+		return -1;
+
+	}
+
+	virtual bool empty() override {
+
+		if (n == 0){ return true; }
+		else { return false; }
+
+	}
+	
+	
 
 };

@@ -18,7 +18,7 @@ class Node {
 		friend std::ostream&operator<<(std::ostream &out, const Node<T> &node){
 
 			out << node.data;
-
+			return out;
 		}
 
 };	
