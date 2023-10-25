@@ -44,11 +44,7 @@ class ListArray : public List<T> {
 
 	T operator[](int pos){
 	
-		if (pos < 0 || pos > n){
-	
-			throw  std::out_of_range("Fuera de Rango");
-	
-		}
+		if (pos < 0 || pos > n){ throw  std::out_of_range("Fuera de Rango"); }
 	
 		return arr[pos];	
 	
@@ -107,11 +103,7 @@ class ListArray : public List<T> {
 
 	virtual void insert(int pos, T e) override {
 
-		if (pos < 0 || pos > n){
-
-			throw  std::out_of_range("Fuera de Rango");
-
-		}
+		if (pos < 0 || pos > n){ throw  std::out_of_range("Fuera de Rango"); }
 		if (size() == max) { resize(size()*2); }			
 		if (pos == 0) { prepend(e); }		
 		else if (pos == n) { append(e); }
@@ -131,11 +123,8 @@ class ListArray : public List<T> {
 			
 	virtual T remove(int pos) override {
 		
-		if (pos < 0 || pos > size()-1){
-
-                        throw  std::out_of_range("Fuera de Rango");
-
-                } else {
+		if (pos < 0 || pos > size()-1){ throw  std::out_of_range("Fuera de Rango"); }
+		else {
 		
 			T temp = arr[pos];
 			for (int i = pos; i < n; i++){
@@ -152,11 +141,7 @@ class ListArray : public List<T> {
 
 	virtual T get(int pos) override {
 
-		if (pos < 0 || pos > size()-1){
-
-                        throw  std::out_of_range("Fuera de Rango");
-
-                }
+		if (pos < 0 || pos > size()-1){ throw  std::out_of_range("Fuera de Rango"); }
 
 		return arr[pos];
 

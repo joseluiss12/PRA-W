@@ -12,97 +12,6 @@ class ListLinked : public List<T> {
 		
 	public:
 	
-		void insert(int pos, T e){
-
-			if (pos > size()-1 || pos < 0){
-
-				throw  std::out_of_range("Fuera de Rango");
-
-			} else {
-				
-				arr[pos] = e;
-
-			}
-		}
-		
-		void append(T e){ arr[max-1] = e; }
-
-		void prepend(T e){ arr[0] = e; }
-
-		T remove(int pos){
-			
-			if (pos > size()-1 || pos < 0){
-
-		                throw  std::out_of_range("Fuera de Rango");
-
-		        }
-
-			T temp = arr[pos];
-			arr[pos] = 0;
-			return temp;
-
-		}
-
-		T get(int pos){
-
-			if (pos > size()-1 || pos < 0){
-
-		                throw  std::out_of_range("Fuera de Rango");
-
-		        }
-
-			return arr[pos];
-
-		}
-
-		int search(T e){
-
-			for (int pos = 0; pos < size()-1; pos ++){
-
-				if ( arr[pos] == e){
-
-					return pos;
-
-				}
-			}
-
-			return -1;
-
-		}
-
-		bool empty(){
-
-			for (int i = 0; i < size()-1; i++){
-
-				if (arr[i] != 0){
-
-					return false;
-
-				}
-
-			}
-
-			return true;
-
-		}
-
-		int size(){
-			
-			int num;
-			for (int i = 0; i < size()-1; i++){
-
-				if (arr[i] != 0){
-
-					num++;
-
-				}
-
-			}
-
-			return num;
-
-		}	
-		
 		ListLinked(){
 		
 			first = nullptr;
@@ -112,50 +21,149 @@ class ListLinked : public List<T> {
 		
 		~ListLinked(){
 			
-			while( aux != nullptr){
+			while(first != nullptr){
 			
-				Node<T> aux = first->next;
+				Node<T>* temp = first->next;
 				delete[] first;
-				first = aux;
+				first = temp;
 			
 			}
 		}
 		
 		T operator[](int pos){
 		
-			if (pos > size()-1 || pos < 0){
-	
-				throw  std::out_of_range("Fuera de Rango");
-	
-			}
+			if (pos < 0 || pos > n){ throw  std::out_of_range("Fuera de Rango"); }
+			Node<T>* temp = first->next;
+			for (int i = 1; i < pos; i++){ temp = temp->next; }
 			
-			for (int i = 0; i < pos; i++){
-			
-				Node<T> aux = first->next;
-				first = aux;
-				
-			}
-			
-			return n;
+			return temp->data;
 			
 		}
 		
-		friend std::ostream&operator<<(std::oestream &out, const ListLinked<T> &list){
+		friend std::ostream&operator<<(std::ostream &out, const ListLinked<T> &list){
 		
 			out << "[ ";
+			Node<T>* temp = list.first;
+			while (temp != nullptr){ 
+
+				out << temp->data;
+				if (temp->next != nullptr){ out << ", "; }
 				
-				while (list.first != nullptr){ 
-
-					out << list.n;
-					if (list.first->next != nullptr){
-
-						out << ", ";
-
-					}
-
-				}
+				temp = temp->next;
+				
+			}
 
 			out << " ]";
 			return out;
 
 		}
+		
+		
+		virtual int size() override {
+			
+			return n;
+
+		}	
+		
+		virtual void append(T e) override { 
+		
+			if (first == nullptr) { prepend(e); }
+			else {
+			
+				Node<T>* pos = first;
+				for (int i = 1; i < size(); i++){
+				
+					pos = pos->next;
+					
+				}
+				Node<T> *temp = new Node<T>(e, pos->next);
+				pos->next = temp;
+				
+			}
+			n++;
+		
+		}
+
+		virtual void prepend(T e) override { 
+		
+			Node<T>* temp = new Node<T>(e, first);
+			first = temp;
+			n++;
+			
+		}
+
+		virtual void insert(int pos, T e) override {
+
+			if (pos < 0 || pos > n){ throw  std::out_of_range("Fuera de Rango"); }			
+			if (pos == 0) { prepend(e); }		
+			else if (pos == n) { append(e); }
+			else {
+							
+				Node<T>* pos = first;
+				for (int i = 1; i < size(); i++){ pos = pos->next; }
+				Node<T> *temp = new Node<T>(e, pos->next);
+				pos->next = temp;
+				n++;
+					
+			}
+					
+		}
+				
+		virtual T remove(int pos) override {
+			
+			Node<T>* temp = first;
+			Node<T>* rem;
+			int supr; 
+			if (pos < 0 || pos > size()-1){ throw  std::out_of_range("Fuera de Rango"); }				
+			if (pos == 0){
+			
+				rem = temp;
+				first = temp->next;
+				supr = rem->data;
+				
+			} else {
+				
+				for (int i = 0; i < pos; i++){ temp = temp->next; }
+					
+				rem = temp->next;
+				supr = rem->data;
+				temp->next = rem->next;
+					
+			}
+			n--;
+			delete[] rem;
+			return supr;
+		}
+
+		virtual T get(int pos) override {
+
+			if (pos < 0 || pos > size()-1){ throw  std::out_of_range("Fuera de Rango"); }
+
+			Node<T>* temp = first;
+			for (int i = 0; i < pos; i++){ temp = temp->next; }
+			return temp->data;
+
+		}
+
+		virtual int search(T e) override {
+			
+			Node<T>* temp = first;
+			for (int i = 0; i < n; i++){
+
+				if ( temp->data == e){ return i; }
+				temp = temp->next;
+				
+			}
+
+			return -1;
+
+		}
+		
+		virtual bool empty() override {
+
+		if (n == 0){ return true; }
+		else { return false; }
+
+		}	
+
+};
